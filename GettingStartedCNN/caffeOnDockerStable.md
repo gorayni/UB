@@ -68,7 +68,8 @@ We will be logged in our Caffe image with a similar prompt like this one **root@
  # Downloading the MNIST dataset
  ./data/mnist/get_mnist.sh 
  
- # Converts the data into lmdb/leveldb format (Calls a C++ binary that does the dirty job	 ./examples/mnist/create_mnist.sh
+ # Converts the data into lmdb/leveldb format (Calls a C++ binary that does the dirty job)
+ ./examples/mnist/create_mnist.sh
 ```
 
 Since we are using only the CPU, we must do something before training the model. We have to replace the line *solver_mode: GPU* for *solver_mode: CPU* in the ** lenet_solver.prototxt ** file. We can do this using any editor, for example by calling

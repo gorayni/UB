@@ -57,7 +57,7 @@ We will be logged in our Caffe image with a similar prompt like this one **root@
 
 **1. Logging in the Docker image.** As in the third step of last section we must logging in the Docker image:
 
-	 docker run -i -t kaixhin/caffe:latest /bin/bash
+	 docker run -i -t tleyden5iwx/caffe-cpu-master:v1 /bin/bash
 	 
 **2. Traing the LeNet network.**
 

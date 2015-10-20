@@ -23,13 +23,13 @@ Perhaps is the easiest and fastest way to get started with Caffe without breakin
 ```bash
 # Pulling the stable build Caffe (NoGPU) image for Docker
 docker pull tleyden5iwx/caffe-cpu-master
-```bash
+```
 	
 Now, lets start our newly downloaded image:
 
 ```bash
 docker run -i -t tleyden5iwx/caffe-cpu-master:latest /bin/bash
-```bash
+```
 
 We will be logged in our Caffe image with a similar prompt like this one **root@4dabab76fab3:~/caffe#**. The hostname displayed in the prompt corresponds to the *Container ID*, in this case the *4dabab76fab3* is our Container ID. It is important to keep the *Container ID* to commit any changes in the image.
 

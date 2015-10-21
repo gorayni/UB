@@ -1,11 +1,11 @@
 <table style="border-collapse:collapse;border-spacing:0;width:100%;">
   <tr>
-    <th>
+    <td>
     	<h1>UB</h1>
 	    <p>Miscellaneous stuff for the UB</p>
-    </th>
-    <th class="tg-yw4l">
+    </td>
+    <td style="text-align:right;">
     	<img src="miniUbLogo.png" alt="UB Logo">
-    </th>
+    </td>
   </tr>
 </table>

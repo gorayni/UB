@@ -1,0 +1,62 @@
+\documentclass{article}
+
+\usepackage{tikz}
+\usetikzlibrary{mindmap,trees}
+
+\usepackage{verbatim}
+
+% Fitting mind map to the page
+\usepackage[active,tightpage]{preview}
+\PreviewEnvironment{tikzpicture}
+\setlength\PreviewBorder{5pt}
+
+\usepackage{varwidth}
+\usepackage{ragged2e}
+
+\definecolor{PALLETE101}{RGB}{234,193,89} 
+\definecolor{PALLETE102}{RGB}{209,107,84} 
+\definecolor{PALLETE103}{RGB}{169,216,200} 
+
+\usepackage{lmodern}
+\SetSymbolFont{letters}{bold}{OML}{cmbr}{bx}{it}
+\renewcommand{\familydefault}{\sfdefault}
+
+\begin{document}
+\pagestyle{empty}
+
+\begin{tikzpicture}
+  \path[mindmap,concept color=PALLETE101,text=white]
+	node[concept,scale=0.75] {Visual Lifelogging}
+	[clockwise from=0]    	
+	child[concept color=PALLETE102,level distance=3.5cm] {
+		node[concept, text width=1.2cm, text centered] {Storytelling}
+		[clockwise from=120]
+		child[concept color=PALLETE103] {node[concept, text width=5em,text centered] {Informative Images Detection}}
+		child[concept color=PALLETE103] {node[concept, text width=5em,text centered] {Data Segmentation}}
+		child[concept color=PALLETE103] {node[concept, text width=5em,text centered] {Egocentric Summarization}}
+		child[concept color=PALLETE103] {node[concept, text width=5em,text centered] {Content-Based Search and retrieval}}
+	}
+	child[concept color=PALLETE102,level distance=3.5cm,grow=-45] {node[concept] {Time-based localization (When?)}}
+	child[concept color=PALLETE102,level distance=3.5cm,grow=-90] {
+		node[concept] {Social interactions (With whom?)}
+	}
+	child[concept color=PALLETE102,level distance=3.5cm,grow=-135] {
+		node[concept] {Scene Understanding (Where?)}
+		[clockwise from=-75]
+		child[concept color=PALLETE103] {node[concept, text width=5em,text centered] {Scene parsing}}
+		child[concept color=PALLETE103] {node[concept, text width=5em,text centered] {Object recognition and discovery}}
+		child[concept color=PALLETE103] {node[concept, text width=5em,text centered] {Spatial localization}}
+	}
+	child[concept color=PALLETE102,level distance=3.5cm,grow=-190] {
+		node[concept] {Action Recognition (What?)}
+		[clockwise from=-180]
+		child[concept color=PALLETE103,grow=-170] {node[concept, text width=5em,text centered] {Body movements}}
+		child[concept color=PALLETE103,grow=-220] {node[concept, text width=5em,text centered] {Object-hand interaction}}
+		child[concept color=PALLETE103,grow=-270] {node[concept, text width=5em,text centered] {Attention}}
+		child[concept color=PALLETE103,grow=-320] {node[concept, text width=5em,text centered,grow=-90] {Other (motion)}}
+	}
+;
+\end{tikzpicture}
+
+
+\end{document}

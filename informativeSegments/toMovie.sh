@@ -42,6 +42,6 @@ do
 
 		let i+=1
 	done
-
-	ffmpeg -pattern_type glob -framerate 0.75 -i "$temp_dir/"'*.'"$extension" -y -vcodec libx264 -vf "scale=trunc(iw/8)*2:trunc(ih/8)*2" -pix_fmt yuv420p "$dataset.mp4"
+	
+	ffmpeg -pattern_type glob -framerate 0.75 -i "$temp_dir/"'*.'"$extension" -y -vcodec libx264 -vf "scale=trunc(iw/16)*2:trunc(ih/16)*2" -pix_fmt yuv420p "$dataset.mp4"
 done

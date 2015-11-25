@@ -99,15 +99,13 @@ function chunkie_download {
 		num_downloaded_bytes=`number_of_bytes "$filename".part"*"`
 		
 		part_number=`ls -1 "$filename".part* | sed -e "s/""$filename"".part//g" | sort -nr | head -1`
-		part_number=`expr $part_number + 1`
-	else	    
-	    num_downloaded_bytes=`expr $FOUR_GB + $FOUR_GB`
+		part_number=`expr $part_number + 1`		
+	elif [ "$chunk_size" -gt "$TOTAL_FILESIZE" ]; then
+		curl -o  "$filename" "$URL"
+		return;
+	else
+		num_downloaded_bytes=0
 	    part_number=0
-
-		if [ "$chunk_size" -gt "$TOTAL_FILESIZE" ]; then
-			curl -o  "$filename" "$URL"
-			return;
-		fi
 	fi
 	
 	if [ "$num_downloaded_bytes" -lt "$TOTAL_FILESIZE" ]; then	

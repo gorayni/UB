@@ -35,8 +35,8 @@ mass_mv "example*.jpg" dest_directory
 
 ```bash
 # Download the URL in chunks of 1 GB
-
 chunkie_download $URL $NEW_FILENAME 1073741824
 
-join_chunkgs $NEW_FILENAME
+# Joining the file chunks
+join_chunks $NEW_FILENAME
 ```

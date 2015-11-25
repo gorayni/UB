@@ -82,48 +82,49 @@ function download_filesize { curl --head $1 2> /dev/null | grep Content-Length |
 
 # Downloads a large file in chunks of max. 4 GB
 function chunkie_download {
-	FOUR_GB=4294967296
+    FOUR_GB=4294967296
 
-	URL=$1
-	filename=$2
-	if [ -z "$3" ]; then
-		chunk_size=$FOUR_GB
-	else
-		chunk_size="$3"
-	fi
+    URL=$1
+    filename=$2
+    if [ -z "$3" ]; then
+        chunk_size=$FOUR_GB
+    else
+        chunk_size="$3"
+    fi
 
-	TOTAL_FILESIZE=`download_filesize $URL`
+    TOTAL_FILESIZE=`download_filesize $URL`
 
-	num_files=`ls -1 "$filename".part* 2> /dev/null | wc -l | tail -1 | sed -e 's/^[ \t]*//'`
-	if [ "$num_files" -gt 0 ]; then	   
-		num_downloaded_bytes=`number_of_bytes "$filename".part"*"`
-		
-		part_number=`ls -1 "$filename".part* | sed -e "s/""$filename"".part//g" | sort -nr | head -1`
-		part_number=`expr $part_number + 1`		
-	elif [ "$chunk_size" -gt "$TOTAL_FILESIZE" ]; then
-		curl -o  "$filename" "$URL"
-		return;
-	else
-		num_downloaded_bytes=0
-	    part_number=0
-	fi
-	
-	if [ "$num_downloaded_bytes" -lt "$TOTAL_FILESIZE" ]; then	
-		upper_download_bound=`expr $num_downloaded_bytes + $chunk_size`
-		while [ $upper_download_bound -lt $TOTAL_FILESIZE ]; do
-			curl --range "$num_downloaded_bytes"-"$upper_download_bound" -o "$filename".part"$part_number" "$URL"		
+    num_files=`ls -1 "$filename".part* 2> /dev/null | wc -l | tail -1 | sed -e 's/^[ \t]*//'`
+    if [ "$num_files" -gt 0 ]; then	   
+        num_downloaded_bytes=`number_of_bytes "$filename".part"*"`
 
-			num_downloaded_bytes=`number_of_bytes "$filename".part"*"`		
-			upper_download_bound=`expr $num_downloaded_bytes + $chunk_size`
-			part_number=`expr $part_number + 1`
-		done
-		curl --range "$num_downloaded_bytes"- -o "$filename".part"$part_number" "$URL"		
-	fi
+        part_number=`ls -1 "$filename".part* | sed -e "s/""$filename"".part//g" | sort -nr | head -1`
+        part_number=`expr $part_number + 1`
+
+    elif [ "$chunk_size" -lt "$TOTAL_FILESIZE" ]; then
+    	num_downloaded_bytes=0
+        part_number=0
+    else
+        curl -o  "$filename" "$URL"
+        return;
+    fi
+
+    if [ "$num_downloaded_bytes" -lt "$TOTAL_FILESIZE" ]; then	
+        upper_download_bound=`expr $num_downloaded_bytes + $chunk_size`
+        while [ $upper_download_bound -lt $TOTAL_FILESIZE ]; do
+            curl --range "$num_downloaded_bytes"-"$upper_download_bound" -o "$filename".part"$part_number" "$URL"
+
+            num_downloaded_bytes=`number_of_bytes "$filename".part"*"`
+            upper_download_bound=`expr $num_downloaded_bytes + $chunk_size`
+            part_number=`expr $part_number + 1`
+        done
+        curl --range "$num_downloaded_bytes"- -o "$filename".part"$part_number" "$URL"
+    fi
 }
 
 function join_chunks {
-	filename=$1
-	echo $filename
-	ls -1 "$filename".part* | sed 's/\([0-9]\)/;\1/' | sort -n -t\; -k2,2 | tr -d ';'
-	cat `ls -1 "$filename".part* | sed 's/\([0-9]\)/;\1/' | sort -n -t\; -k2,2 | tr -d ';'` > $filename;
+    filename=$1
+    echo $filename
+    ls -1 "$filename".part* | sed 's/\([0-9]\)/;\1/' | sort -n -t\; -k2,2 | tr -d ';'
+    cat `ls -1 "$filename".part* | sed 's/\([0-9]\)/;\1/' | sort -n -t\; -k2,2 | tr -d ';'` > $filename;
 }

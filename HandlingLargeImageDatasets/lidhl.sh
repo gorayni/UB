@@ -92,37 +92,40 @@ function chunkie_download {
 		chunk_size="$3"
 	fi
 
+	TOTAL_FILESIZE=`download_filesize $URL`
+
 	num_files=`ls -1 "$filename".part* 2> /dev/null | wc -l | tail -1 | sed -e 's/^[ \t]*//'`
-	if [ "$num_files" -gt 0 ]; then
-	    part_number=`ls -1 "$filename".part* | sed -e "s/""$filename"".part//g" | sort -nr | head -1`
+	if [ "$num_files" -gt 0 ]; then	   
+		num_downloaded_bytes=`number_of_bytes "$filename".part"*"`
+		
+		part_number=`ls -1 "$filename".part* | sed -e "s/""$filename"".part//g" | sort -nr | head -1`
 		part_number=`expr $part_number + 1`
-
-		num_bytes=`number_of_bytes "$filename".part"*"`
-		num_bytes=`expr $num_bytes`	
-	else
+	else	    
+	    num_downloaded_bytes=`expr $FOUR_GB + $FOUR_GB`
 	    part_number=0
-	    num_bytes=0   
+
+		if [ "$chunk_size" -gt "$TOTAL_FILESIZE" ]; then
+			curl -o  "$filename" "$URL"
+			return;
+		fi
 	fi
+	
+	if [ "$num_downloaded_bytes" -lt "$TOTAL_FILESIZE" ]; then	
+		upper_download_bound=`expr $num_downloaded_bytes + $chunk_size`
+		while [ $upper_download_bound -lt $TOTAL_FILESIZE ]; do
+			curl --range "$num_downloaded_bytes"-"$upper_download_bound" -o "$filename".part"$part_number" "$URL"		
 
-	total_filesize=`download_filesize $URL`
-
-	if [ "$total_filesize" -lt "$chunk_size" ]; then
-		curl -o  "$filename" "$URL"
-		return;	
+			num_downloaded_bytes=`number_of_bytes "$filename".part"*"`		
+			upper_download_bound=`expr $num_downloaded_bytes + $chunk_size`
+			part_number=`expr $part_number + 1`
+		done
+		curl --range "$num_downloaded_bytes"- -o "$filename".part"$part_number" "$URL"		
 	fi
-
-	while [  $num_bytes -lt $total_filesize ]; do
-		curl --range "$num_bytes"-`expr $num_bytes + $chunk_size` -o  "$filename".part"$part_number" "$URL"
-
-		num_bytes=`number_of_bytes "$filename".part"*"`
-		num_bytes=`expr $num_bytes`
-
-		part_number=`expr $part_number + 1`
-	done
 }
 
 function join_chunks {
 	filename=$1
+	echo $filename
 	ls -1 "$filename".part* | sed 's/\([0-9]\)/;\1/' | sort -n -t\; -k2,2 | tr -d ';'
 	cat `ls -1 "$filename".part* | sed 's/\([0-9]\)/;\1/' | sort -n -t\; -k2,2 | tr -d ';'` > $filename;
 }

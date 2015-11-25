@@ -30,3 +30,13 @@ mass_ls -lah "example*.jpg"
 ```bash
 mass_mv "example*.jpg" dest_directory
 ```
+
+### Downloading large datasets in chunks
+
+```bash
+# Download the URL in chunks of 1 GB
+
+chunkie_download $URL $NEW_FILENAME 1073741824
+
+join_chunkgs $NEW_FILENAME
+```

@@ -1,6 +1,5 @@
 
 # Rules for writing papers (draft)
-<br></br>
 
 ## Basic
 

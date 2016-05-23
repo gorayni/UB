@@ -18,6 +18,11 @@ num_padding_zeros=`extract_frames "$video_filepath"`
 ```bash
 rm_frames "example" "jpg" 11159 11290 "$num_padding_zeros"
 ```
+### Massively remove files in a directory
+
+```bash
+mass_rm -rvf "example*.jpg"
+```
 
 ### Massively list files in a directory
 

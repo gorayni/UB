@@ -74,6 +74,13 @@ function mass_ls {
 	find . -type f -name "$filename_regex" | xargs ls "$ls_args";
 }
 
+# Massive rm files
+function mass_rm {
+    ls_args="$1";
+    filename_regex="$2";
+    find . -type f -name "$filename_regex" | xargs rm "$ls_args";
+}
+
 # Returns the number of bytes of the files provided by the arg
 function number_of_bytes { wc -c $1 | tail -1 | sed -e 's/^[ \t]*//' | cut -d ' ' -f 1; }
 

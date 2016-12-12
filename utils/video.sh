@@ -56,7 +56,6 @@ function rm_frames {
 
 # Removes the frames by range
 function rm_frames {
-	
 	basename="$1"
 	file_extension="$2"
 	start_frame="$3"

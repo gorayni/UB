@@ -22,20 +22,29 @@ function frames_per_second {
 }
 
 # Extracts the frames from a video adding the precise number of padding zeros
-function extract_frames {	
-	video_filepath="$1"
+function extract_frames {
+    video_filepath="$1"
+    
+    if [ -z "$2" ]; then
+        output_dirpath=`pwd`
+    else
+        output_dirpath="$2"
+    fi
 
-	if [ -z "$2" ]; then
-		num_frames=`number_of_frames $video_filepath`
-		num_padding_zeros="${#num_frames}"
-	else
-		num_padding_zeros="$2"  
-	fi
+    if [ -z "$3" ]; then
+        num_frames=`number_of_frames $video_filepath`
+        num_padding_zeros="${#num_frames}"
+    else
+        num_padding_zeros="$3"
+    fi
 
     fps=`frames_per_second $video_filepath`
-	filename="${video_filepath%.*}"
+    video_filename="${video_filepath%.*}"
+    video_basename=`basename "${video_filename}"`
+           
+    mkdir -p "$output_dirpath"/"$video_basename"    
 
-    ffmpeg -i $video_filepath -y -an -qscale 0 -r $fps/1 "$filename"_%0"$num_padding_zeros"d.jpg >&2
+    ffmpeg -i $video_filepath -y -an -qscale 0 -r $fps/1 "$output_dirpath"/"$video_basename"/%0"$num_padding_zeros"d.jpg >&2
 
     echo $num_padding_zeros
 }

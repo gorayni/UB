@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#!/bin/bash
-
 # Returns the number of frames from a video
 function number_of_frames {
 	video_filepath="$1"
